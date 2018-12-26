@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 
-import org.apache.commons.collections.FastHashMap; // DEPRECATED
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.digester.xmlrules.DigesterLoader;
@@ -87,26 +87,23 @@ public class ValidatorResources implements Serializable {
     /**
      * <code>Map</code> of <code>FormSet</code>s stored under
      * a <code>Locale</code> key (expressed as a String).
-     * @deprecated Subclasses should use getFormSets() instead.
+     * @see #getFormSets()
      */
-    @Deprecated
-    protected FastHashMap hFormSets = new FastHashMap(); // <String, FormSet>
+    private HashMap<String, FormSet> hFormSets = new HashMap<String, FormSet>();
 
     /**
      * <code>Map</code> of global constant values with
      * the name of the constant as the key.
-     * @deprecated Subclasses should use getConstants() instead.
+     * @see #getConstants()
      */
-    @Deprecated
-    protected FastHashMap hConstants = new FastHashMap(); // <String, String>
+    private HashMap<String, String> hConstants = new HashMap<String, String>();
 
     /**
      * <code>Map</code> of <code>ValidatorAction</code>s with
      * the name of the <code>ValidatorAction</code> as the key.
-     * @deprecated Subclasses should use getActions() instead.
+     * @see #getActions()
      */
-    @Deprecated
-    protected FastHashMap hActions = new FastHashMap(); // <String, ValidatorAction>
+    private HashMap<String, ValidatorAction> hActions = new HashMap<String, ValidatorAction>();
 
     /**
      * The default locale on our server.
@@ -523,10 +520,6 @@ public class ValidatorResources implements Serializable {
      * this method when finished.
      */
     public void process() {
-        hFormSets.setFast(true);
-        hConstants.setFast(true);
-        hActions.setFast(true);
-
         this.processForms();
     }
 

@@ -22,8 +22,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.FastHashMap;// DEPRECATED
+import java.util.HashMap;
 
 /**
  * <p>
@@ -55,10 +54,9 @@ public class Form implements Serializable {
     /**
      * Map of <code>Field</code>s keyed on their property value.
      *
-     * @deprecated   Subclasses should use getFieldMap() instead.
+     * @see #getFieldMap()
      */
-    @Deprecated
-    protected FastHashMap hFields = new FastHashMap(); // <String, Field>
+    private HashMap<String, Field> hFields = new HashMap<String, Field>();
 
     /**
      * The name/key of the form which this form extends from.
@@ -146,17 +144,14 @@ public class Form implements Serializable {
 
         List<Field> templFields = new ArrayList<Field>();
         @SuppressWarnings("unchecked") // FastHashMap is not generic
-        Map<String, Field> temphFields = new FastHashMap();
-        Iterator<Field> dependsIt = depends.getFields().iterator();
-        while (dependsIt.hasNext()) {
-            Field defaultField = dependsIt.next();
+        Map<String, Field> temphFields = new HashMap();
+        for (Field defaultField : depends.getFields()) {
             if (defaultField != null) {
                 String fieldKey = defaultField.getKey();
                 if (!this.containsField(fieldKey)) {
                     templFields.add(defaultField);
                     temphFields.put(fieldKey, defaultField);
-                }
-                else {
+                } else {
                     Field old = getField(fieldKey);
                     getFieldMap().remove(fieldKey);
                     lFields.remove(old);
@@ -201,7 +196,6 @@ public class Form implements Serializable {
                 }
             }
         }
-        hFields.setFast(true);
         //no need to reprocess parent's fields, we iterate from 'n'
         for (Iterator<Field> i = lFields.listIterator(n); i.hasNext(); ) {
             Field f = i.next();

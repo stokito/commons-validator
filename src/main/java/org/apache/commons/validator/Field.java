@@ -29,7 +29,6 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.FastHashMap; // DEPRECATED
 import org.apache.commons.validator.util.ValidatorUtils;
 
 /**
@@ -128,16 +127,14 @@ public class Field implements Cloneable, Serializable {
     private final List<String> dependencyList = Collections.synchronizedList(new ArrayList<String>());
 
     /**
-     * @deprecated Subclasses should use getVarMap() instead.
+     * @see #getVarMap()
      */
-    @Deprecated
-    protected FastHashMap hVars = new FastHashMap(); // <String, Var>
+    private HashMap<String, Var> hVars = new HashMap<String, Var>();
 
     /**
-     * @deprecated Subclasses should use getMsgMap() instead.
+     * @see #getMsgMap()
      */
-    @Deprecated
-    protected FastHashMap hMsgs = new FastHashMap(); // <String, Msg>
+    private HashMap<String, Msg> hMsgs = new HashMap<String, Msg>();
 
     /**
      * Holds Maps of arguments.  args[0] returns the Map for the first
@@ -561,9 +558,6 @@ public class Field implements Cloneable, Serializable {
      * to create the dependency <code>Map</code>.
      */
     void process(Map<String, String> globalConstants, Map<String, String> constants) {
-        this.hMsgs.setFast(false);
-        this.hVars.setFast(true);
-
         this.generateKey();
 
         // Process FormSet Constants
@@ -603,8 +597,6 @@ public class Field implements Cloneable, Serializable {
 
             this.processMessageComponents(key2, replaceValue);
         }
-
-        hMsgs.setFast(true);
     }
 
     /**
@@ -711,8 +703,8 @@ public class Field implements Cloneable, Serializable {
             field.args[i] = argMap;
         }
 
-        field.hVars = ValidatorUtils.copyFastHashMap(hVars);
-        field.hMsgs = ValidatorUtils.copyFastHashMap(hMsgs);
+        field.hVars = new HashMap(hVars);
+        field.hMsgs = new HashMap(hMsgs);
 
         return field;
     }
@@ -949,7 +941,7 @@ public class Field implements Cloneable, Serializable {
      * @since Validator 1.2.0
      * @return A Map of the Field's messages.
      */
-    @SuppressWarnings("unchecked") // FastHashMap does not support generics
+    @SuppressWarnings("unchecked")
     protected Map<String, Msg> getMsgMap() {
         return hMsgs;
     }
@@ -959,7 +951,7 @@ public class Field implements Cloneable, Serializable {
      * @since Validator 1.2.0
      * @return A Map of the Field's variables.
      */
-    @SuppressWarnings("unchecked") // FastHashMap does not support generics
+    @SuppressWarnings("unchecked")
     protected Map<String, Var> getVarMap() {
         return hVars;
     }

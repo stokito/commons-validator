@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.collections.FastHashMap; // DEPRECATED
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.Arg;
@@ -33,10 +32,6 @@ import org.apache.commons.validator.Var;
 
 /**
  * Basic utility methods.
- * <p>
- * The use of FastHashMap is deprecated and will be replaced in a future
- * release.
- * </p>
  *
  * @version $Revision$
  */
@@ -126,44 +121,6 @@ public class ValidatorUtils {
             return value.toString();
         }
 
-    }
-
-    /**
-     * Makes a deep copy of a <code>FastHashMap</code> if the values
-     * are <code>Msg</code>, <code>Arg</code>,
-     * or <code>Var</code>.  Otherwise it is a shallow copy.
-     *
-     * @param map <code>FastHashMap</code> to copy.
-     * @return FastHashMap A copy of the <code>FastHashMap</code> that was
-     * passed in.
-     * @deprecated This method is not part of Validator's public API.  Validator
-     * will use it internally until FastHashMap references are removed.  Use
-     * copyMap() instead.
-     */
-    @Deprecated
-    public static FastHashMap copyFastHashMap(FastHashMap map) {
-        FastHashMap results = new FastHashMap();
-
-        @SuppressWarnings("unchecked") // FastHashMap is not generic
-        Iterator<Entry<String, ?>> i = map.entrySet().iterator();
-        while (i.hasNext()) {
-            Entry<String, ?> entry = i.next();
-            String key = entry.getKey();
-            Object value = entry.getValue();
-
-            if (value instanceof Msg) {
-                results.put(key, ((Msg) value).clone());
-            } else if (value instanceof Arg) {
-                results.put(key, ((Arg) value).clone());
-            } else if (value instanceof Var) {
-                results.put(key, ((Var) value).clone());
-            } else {
-                results.put(key, value);
-            }
-        }
-
-        results.setFast(true);
-        return results;
     }
 
     /**
